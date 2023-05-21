@@ -1,6 +1,7 @@
 try:
     import sys
     import os
+    import platform
     import pickle
     from app_Config import constantes
 
@@ -31,7 +32,7 @@ class ConfigHost(object):
 
     """
 
-    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Constructor
     def __init__(self, serverhost=None, iphost=None,
                  usuariohost=None, passhost=None,
@@ -78,7 +79,12 @@ class ConfigHost(object):
             self.__pathHost = os.getcwd() + '\\archivos_Estaticos\\Host\\'
         else:
             os.chdir('..')
-            self.__pathHost = os.getcwd() + '\\archivos_Estaticos\\Host\\'
+
+            # determinamos en que plataforma estamos ejeutando el script
+            if platform.system() == 'Linux':
+                self.__pathHost = os.getcwd() + '/archivos_Estaticos/Host/'
+            else:
+                self.__pathHost = os.getcwd() + '\\archivos_Estaticos\\Host\\'
 
         self.__default_file = self.__pathHost + 'host.pck'
         self.__host_dict = {}
@@ -91,19 +97,19 @@ class ConfigHost(object):
         # Ubicacion de los datos de configuracion
         self.__loadfile()
 
-
-    # ---------TIPO DE SERVER-------------------------------------------------------------------
+    # ---------TIPO DE SERVER----------------------------------------------------------------
+    # getter del atributo tipoServer
     @property
     def tipoServer(self):
         return self.__tipoServer
 
-
-
     # ---------SERVER HOST-------------------------------------------------------------------
+    # getter del atributo serverhost
     @property
     def serverhost(self):
         return self.__serverhost
 
+    # setter del atributo serverhost
     @serverhost.setter
     def serverhost(self, valor):
         """
@@ -134,10 +140,12 @@ class ConfigHost(object):
         self.__serverhost = valor
 
     # ---------IP HOST-------------------------------------------------------------------
+    # getter del atributo iphost
     @property
     def iphost(self):
         return self.__iphost
 
+    # setter del atributo iphost
     @iphost.setter
     def iphost(self, valor):
         """
@@ -147,12 +155,13 @@ class ConfigHost(object):
         """
         self.__iphost = valor
 
-
-    # ---------USUARIO DEL HOST-------------------------------------------------------------------
+    # ---------USUARIO DEL HOST----------------------------------------------------------
+    # getter del atributo usuariohost de conexion
     @property
     def usuariohost(self):
         return self.__usuariohost
 
+    # setter del atributo usuariohost de conexion
     @usuariohost.setter
     def usuariohost(self, valor):
         """
@@ -161,11 +170,13 @@ class ConfigHost(object):
         """
         self.__usuariohost = valor
 
-    # ---------PASSWORD DEL HOST-------------------------------------------------------------------
+    # ---------PASSWORD DEL HOST---------------------------------------------------------
+    # getter del atributo passhost de conexion
     @property
     def passhost(self):
         return self.__passhost
 
+    # setter del atributo passhost de conexion
     @passhost.setter
     def passhost(self, valor):
         """
@@ -175,10 +186,12 @@ class ConfigHost(object):
         self.__passhost = valor
 
     # ---------HOST-------------------------------------------------------------------
+    # getter del atributo host
     @property
     def host(self):
         return self.__host
 
+    # setter del atributo host
     @host.setter
     def host(self, valor):
         """
@@ -189,10 +202,12 @@ class ConfigHost(object):
         self.__host = valor
 
     # ---------DATABASEHOST-------------------------------------------------------------------
+    # getter del atributo databasehost
     @property
     def databasehost(self):
         return self.__databasehost
 
+    # setter del atributo databasehost
     @databasehost.setter
     def databasehost(self, valor):
         """
@@ -202,10 +217,12 @@ class ConfigHost(object):
         self.__databasehost = valor
 
     # ---------SCHEMAHOST-------------------------------------------------------------------
+    # getter del atributo schemahost
     @property
     def schemahost(self):
         return self.__schemahost
 
+    # setter del atributo schemahost
     @schemahost.setter
     def schemahost(self, valor):
         """
@@ -217,10 +234,12 @@ class ConfigHost(object):
         self.__schemahost = valor
 
     # ---------ACCION-------------------------------------------------------------------
+    # geter del atributo accion
     @property
     def accion(self):
         return self.__accion
 
+    # seter del atributo accions
     @accion.setter
     def accion(self, valor):
         """
@@ -234,10 +253,9 @@ class ConfigHost(object):
         """
         self.__accion = valor
 
-
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Obtener la descripcion del host
-
+    # es el string de conexion de las distintas bases de datos
     def __string_conexion_database(self):
         """
         String de conexion a distintos database\n
@@ -246,6 +264,7 @@ class ConfigHost(object):
         #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         # para el caso de Iseries
         if self.serverhost == 'iseries':
+
             self.__habilitado = (
             self.serverhost != None and  self.usuariohost != None and self.passhost !=None and self.schemahost != None
             )
@@ -529,10 +548,8 @@ class ConfigHost(object):
 
             return f'mongodb://{uid}:{pwd}@{host}/{Db}'
 
-
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Obtener la descripcion del host
-
     def __get_host(self):
         """
         Obtiene los datos del host\n
@@ -564,7 +581,7 @@ class ConfigHost(object):
             return '** DEBE INGRESAR EL HOST **'
 
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    # Lista de errores
+    # Este metodo realiza el listado de los host
     def list_host(self):
         """
         Este metodo realiza el listado de los host\n
@@ -606,7 +623,7 @@ class ConfigHost(object):
         return retorno
 
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    # Visualizar un string del error
+    # Devuelve el contenido en un formato string
     def __datos__(self):
         """
         Devuelve el contenido en un formato string
@@ -614,7 +631,7 @@ class ConfigHost(object):
         return self.__get_host()
 
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    # Agregar un nuevo codigo de error del metodo
+    # Agregar un nuevo host
     def add_host(self):
         """
         Agrega un nuevo host del metodo a la clase\n
@@ -714,7 +731,6 @@ class ConfigHost(object):
 
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Salvar en forma permanente los datos de configuracion del host
-
     def __savefile(self):
         """
         Graba en forma permanente los datos del host
@@ -733,6 +749,7 @@ class ConfigHost(object):
 
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Carga el diccionario de los host
+    # abre el archivo y recupera los datos de conexion a las bases de datos
     def __loadfile(self):
 
         # Realiza la apertura del archivo
@@ -874,7 +891,6 @@ class ConfigHost(object):
 
         pass
 
-
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Determina si existe el Validator
     def __setValidator(self):
@@ -890,11 +906,8 @@ class ConfigHost(object):
             self.add_host()
             self.__hostValidator = 'Validator'
 
-
-
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Nuevo server dbm
-
     def __newserver(self):
         pass
 
